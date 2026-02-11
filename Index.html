@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Question for You ❤️</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffdae0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        #container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(214, 51, 132, 0.2);
+            max-width: 500px;
+            z-index: 10;
+        }
+
+        h1 {
+            color: #d63384;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        img {
+            width: 280px;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            min-height: 100px;
+        }
+
+        button {
+            padding: 12px 28px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s ease-out;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        #yesBtn {
+            background-color: #ff4d6d;
+            color: white;
+            z-index: 100;
+        }
+
+        #noBtn {
+            background-color: #6c757d;
+            color: white;
+            position: absolute;
+            transition: 0.1s;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="container">
+        <h1 id="question">Will you be my Valentine? 🥺</h1>
+        <img id="mainGif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHIwdW1mY3R2MzN4YmZzZzR4YmZzZzR4YmZzZzR4YmZzZzR4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/qUIm5wu6LAAog/giphy.gif" alt="Puppy Eyes">
+        
+        <div class="buttons">
+            <button id="yesBtn">Yes!</button>
+            <button id="noBtn">No</button>
+        </div>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="https://www.chosic.com/wp-content/uploads/2021/07/Rain-and-Flowers-Cute-Lo-Fi-Background-Music.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="cheerSound">
+        <source src="https://www.myinstants.com/media/sounds/success-fanfare-trumpets.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const mainGif = document.getElementById('mainGif');
+        const question = document.getElementById('question');
+        const bgMusic = document.getElementById('bgMusic');
+        const cheerSound = document.getElementById('cheerSound');
+
+        let yesSize = 1.2;
+        let musicStarted = false;
+
+        // The "Elusive No" and "Growing Yes" Logic
+        noBtn.addEventListener('mouseover', () => {
+            // Start music on first attempt to click 'No'
+            if (!musicStarted) {
+                bgMusic.play().catch(e => console.log("Audio requires interaction first"));
+                musicStarted = true;
+            }
+
+            // Move No Button
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            noBtn.style.left = `${Math.max(10, x)}px`;
+            noBtn.style.top = `${Math.max(10, y)}px`;
+
+            // Grow Yes Button
+            yesSize += 0.35;
+            yesBtn.style.fontSize = `${yesSize}rem`;
+            yesBtn.style.padding = `${12 + (yesSize * 3)}px ${28 + (yesSize * 6)}px`;
+        });
+
+        // The "Success" Logic
+        yesBtn.addEventListener('click', () => {
+            // Stop romantic music, play victory sound
+            bgMusic.pause();
+            cheerSound.play();
+
+            // Confetti Explosion
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff4d6d', '#ff8fa3', '#ffb3c1', '#ffffff']
+            });
+
+            // Update UI
+            question.innerHTML = "Yay! Best Valentine's Day ever! ❤️";
+            mainGif.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3ZhcHByZ3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/TdfyKrN7HGTIY/giphy.gif";
+            noBtn.style.display = 'none';
+            yesBtn.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
